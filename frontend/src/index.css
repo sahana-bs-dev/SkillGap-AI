@@ -1,0 +1,28 @@
+:root{
+  --bg:#FBFAFE;
+  --card:#FFFFFF;
+  --ink:#332F4B;
+  --ink-soft:#847F9E;
+  --primary:#7C6FE8;
+  --primary-soft:#EDEAFC;
+  --peach:#FF9E7A;
+  --peach-soft:#FFEEE5;
+  --mint:#3FAE86;
+  --mint-soft:#E3F7EE;
+  --rose:#F0596B;
+  --rose-soft:#FDE9EC;
+  --line:#ECE9F7;
+  --radius-lg:26px;
+  --radius-md:18px;
+  --radius-sm:12px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:'Fredoka', sans-serif; margin:0; font-weight:600;}
+p{margin:0;}
