@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
 from app.services.resume_parser import extract_resume_text
 from app.utils.auth_utils import get_current_user
+from app.services.ai_matcher import analyze_resume_vs_jd
 
 router = APIRouter()
 
@@ -14,8 +15,8 @@ async def analyze(
 ):
     """
     Accepts either an uploaded resume file OR pasted resume text, plus the
-    job description text. Returns the parsed resume text + JD text so the
-    frontend (and later, Phase 3's AI matcher) can use it.
+    job description text. Extracts the resume text, runs it against the JD
+    through the AI matcher, and returns the full structured analysis.
     """
     if not jd_text.strip():
         raise HTTPException(status_code=400, detail="Job description is required.")
@@ -42,8 +43,16 @@ async def analyze(
             detail="Couldn't extract any text from the resume. Try a different file.",
         )
 
+    try:
+        analysis_result = analyze_resume_vs_jd(
+            resume_text=final_resume_text, jd_text=jd_text.strip()
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=502, detail=f"AI analysis failed: {str(e)}")
+
     return {
         "user_email": user_email,
         "resume_text": final_resume_text,
         "jd_text": jd_text.strip(),
+        **analysis_result,
     }
