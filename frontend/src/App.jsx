@@ -4,6 +4,7 @@ import UploadPage from "./pages/UploadPage";
 import ReportPage from "./pages/ReportPage";
 import AppShell from "./components/layout/AppShell";
 import AnalyzingPage from "./pages/AnalyzingPage"; 
+import ComparePage from './pages/ComparePage';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           {/* <Route path="/compare" element={<ComparePage />} /> -- Phase 4 */}
         </Route>
         <Route path="/analyzing" element={<AnalyzingPage />} />
+        <Route path="/compare" element={<ComparePage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import ComparisonPopup from '../components/report/ComparisonPopup';
 import "./ReportPage.css";
 
 function summaryFor(score) {
@@ -9,10 +11,15 @@ function summaryFor(score) {
 }
 
 export default function ReportPage() {
+  const [showPopup, setShowPopup] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const data = location.state;
+
+  useEffect(() => {
+    if (data) setShowPopup(true);
+  }, [data]);
 
   // Guard: someone landed here directly without running an analysis
   if (!data) {
@@ -27,6 +34,7 @@ export default function ReportPage() {
   }
 
   const analysis = {
+    id: data.id ?? data._id, // needed by ComparisonPopup — make sure backend returns this on save
     jobTitle: "Resume analysis",
     company: "",
     score: data.match_score,
@@ -35,6 +43,9 @@ export default function ReportPage() {
     missing: data.suggestions.map((s) => ({ skill: s.missing_skill, fix: s.suggestion })),
   };
 
+  if (!analysis.id) {
+  console.warn("Analysis has no id — Compare feature will not work until backend returns one.");
+}
   const resumeText = data.resume_text;
   const jdText = data.jd_text;
 
@@ -75,7 +86,7 @@ export default function ReportPage() {
         </div>
       </div>
 
-            <div className="skills-grid">
+      <div className="skills-grid">
         <div className="skills-col match">
           <h4><span className="sticker match">✓ Matched</span></h4>
           {analysis.matched.map((skill) => (
@@ -111,6 +122,17 @@ export default function ReportPage() {
       <button className="btn-ghost" onClick={() => navigate("/upload")}>
         ← Back to upload
       </button>
+
+      {showPopup && (
+  <ComparisonPopup
+    open={showPopup}
+    newAttemptScore={analysis.score}
+    onCompare={(selectedId) => {
+  navigate(`/compare?a=${analysis.id}&b=${selectedId}`);
+}}
+    onSkip={() => setShowPopup(false)}
+  />
+)}
     </div>
   );
 }
