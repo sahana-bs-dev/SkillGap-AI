@@ -1,15 +1,25 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
-import DashboardPage from "./pages/DashboardPage";
 import UploadPage from "./pages/UploadPage";
+import ReportPage from "./pages/ReportPage";
+import AppShell from "./components/layout/AppShell";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AuthPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/upload" element={<UploadPage />} />
+
+        {/* "Dashboard" in the blueprint is just the Upload screen's nav label —
+            there's no separate dashboard view, so redirect straight to /upload. */}
+        <Route path="/dashboard" element={<Navigate to="/upload" replace />} />
+
+        {/* Everything inside the app (post-login) shares the sidebar layout */}
+        <Route element={<AppShell />}>
+          <Route path="/upload" element={<UploadPage />} />
+          <Route path="/report" element={<ReportPage />} />
+          {/* <Route path="/compare" element={<ComparePage />} /> -- Phase 4 */}
+        </Route>
       </Routes>
     </BrowserRouter>
   );

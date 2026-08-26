@@ -38,3 +38,28 @@ export async function googleAuth(credential) {
   }
   return response.json();
 }
+
+
+export async function analyzeResume({ resumeFile, resumeText, jdText }) {
+  const token = localStorage.getItem("token");
+
+  const formData = new FormData();
+  formData.append("jd_text", jdText);
+  if (resumeFile) {
+    formData.append("resume_file", resumeFile);
+  } else {
+    formData.append("resume_text", resumeText);
+  }
+
+  const response = await fetch(`${BASE_URL}/upload/analyze`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || "Analysis failed");
+  }
+  return response.json();
+}
