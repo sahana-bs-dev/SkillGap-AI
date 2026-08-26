@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from jose import jwt
 from passlib.context import CryptContext
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 load_dotenv()
 
@@ -33,3 +34,22 @@ def decode_access_token(token: str):
         return payload
     except jwt.JWTError:
         return None
+    
+
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPBearer
+
+oauth2_scheme = HTTPBearer()
+
+
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme)):
+    """
+    FastAPI dependency: decodes the JWT from the Authorization header
+    and returns the user's email. Raises 401 if the token is missing/invalid.
+    Use like: def my_route(user_email: str = Depends(get_current_user)):
+    """
+    token = credentials.credentials
+    payload = decode_access_token(token)
+    if payload is None or "email" not in payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return payload["email"]
