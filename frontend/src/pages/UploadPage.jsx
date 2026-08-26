@@ -3,7 +3,6 @@ import "./UploadPage.css";
 import { analyzeResume } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-
 // Mock data for now — swap this for a real API call (e.g. getRecentAnalyses())
 // once your friend's history endpoint is live in Phase 2/4
 const MOCK_RECENT_ANALYSES = [
@@ -19,9 +18,6 @@ export default function UploadPage() {
   const [jdText, setJdText] = useState("");
   const [recentAnalyses, setRecentAnalyses] = useState(MOCK_RECENT_ANALYSES);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [result, setResult] = useState(null);
   const navigate = useNavigate();
 
   function handleFileChange(e) {
@@ -29,42 +25,22 @@ export default function UploadPage() {
     if (file) setResumeFile(file);
   }
 
-  async function handleRunAnalysis() {
-    if (resumeMode === "upload" && !resumeFile) {
-      alert("Please upload a resume file first.");
-      return;
-    }
-    if (resumeMode === "paste" && !resumeText.trim()) {
-      alert("Please paste your resume text first.");
-      return;
-    }
-    if (!jdText.trim()) {
-      alert("Please paste the job description first.");
-      return;
-    }
-
-    setError("");
-    setResult(null);
-    setLoading(true);
-
-    try {
-      const data = await analyzeResume({
-        resumeFile: resumeMode === "upload" ? resumeFile : null,
-        resumeText: resumeMode === "paste" ? resumeText : "",
-        jdText,
-      });
-      // Take the user straight to the Report page with the parsed text.
-      // Once the real AI matcher (Phase 3 backend) exists, its result
-      // will be passed here too instead of ReportPage using mock data.
-      navigate("/report", {
-        state: { resumeText: data.resume_text, jdText: data.jd_text },
-      });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  function handleRunAnalysis() {
+  if (resumeMode === "upload" && !resumeFile) {
+    alert("Please upload a resume file first.");
+    return;
   }
+  if (resumeMode === "paste" && !resumeText.trim()) {
+    alert("Please paste your resume text first.");
+    return;
+  }
+  if (!jdText.trim()) {
+    alert("Please paste the job description first.");
+    return;
+  }
+
+  navigate("/analyzing", { state: { resumeFile, resumeText, jdText } });
+}
 
   function scoreClass(score) {
     if (score >= 75) return "score-high";
@@ -132,30 +108,11 @@ export default function UploadPage() {
       </div>
 
       <div className="run-row">
-        <button className="btn-accent" onClick={handleRunAnalysis} disabled={loading}>
-          {loading ? "Analyzing…" : "Run analysis →"}
-        </button>
+        <button className="btn-accent" onClick={handleRunAnalysis}>
+  Run analysis →
+</button>
       </div>
-
-      {error && (
-        <p style={{ color: "#F0596B", fontSize: "13px", marginBottom: "20px" }}>
-          {error}
-        </p>
-      )}
-
-      {/* Temporary success preview — Phase 3 replaces this with the real Report page */}
-      {result && (
-        <div className="card" style={{ marginBottom: "24px" }}>
-          <h3>Parsed successfully ✅</h3>
-          <p className="hint">This confirms the backend received and parsed your input.</p>
-          <p style={{ fontSize: "13px", marginTop: "10px" }}>
-            <strong>Resume text (preview):</strong>
-            <br />
-            {result.resume_text.slice(0, 200)}...
-          </p>
-        </div>
-      )}
-
+    
       <div className="eyebrow">Recent analyses</div>
       <div className="recent-list">
         {recentAnalyses.length === 0 ? (
