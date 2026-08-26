@@ -20,7 +20,6 @@ export default function AuthPage() {
             to their first roles.
           </p>
         </div>
-        <div className="foot">Auth → Upload → Report → Track progress</div>
       </div>
 
       <div className="auth-form-wrap">

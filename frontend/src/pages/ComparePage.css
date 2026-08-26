@@ -1,0 +1,27 @@
+.compare-page-state {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  color: #6b6689;
+  font-size: 15px;
+  padding: 24px;
+}
+
+.compare-page-link {
+  border: none;
+  background: #7c6fea;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.compare-page-link:hover {
+  background: #6c5ce7;
+}

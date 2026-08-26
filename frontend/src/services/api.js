@@ -1,3 +1,7 @@
+
+// -----------THE BELOW CODE IS THE REAL api.js -------------------------------
+
+
 const BASE_URL = "http://localhost:8000";
 
 export async function signupUser(name, email, password) {
@@ -39,7 +43,6 @@ export async function googleAuth(credential) {
   return response.json();
 }
 
-
 export async function analyzeResume({ resumeFile, resumeText, jdText }) {
   const token = localStorage.getItem("token");
 
@@ -60,6 +63,36 @@ export async function analyzeResume({ resumeFile, resumeText, jdText }) {
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.detail || "Analysis failed");
+  }
+  return response.json();
+}
+
+export async function getAnalysisHistory() {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/history`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || "Failed to load history");
+  }
+  return response.json();
+}
+
+export async function getAnalysisById(id) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/history/${id}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || "Failed to load analysis");
   }
   return response.json();
 }

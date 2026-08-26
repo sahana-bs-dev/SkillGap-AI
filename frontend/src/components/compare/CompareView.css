@@ -1,0 +1,171 @@
+.compare-view {
+  padding: 40px 48px 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.compare-view__eyebrow {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #7c6fea;
+  margin: 0 0 8px;
+}
+
+.compare-view__title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: #1f1b3a;
+  margin: 0 0 32px;
+}
+
+.compare-view__vs {
+  font-weight: 600;
+  color: #9b93c9;
+  font-size: 20px;
+  margin: 0 4px;
+}
+
+.compare-view__row {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.compare-view__divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 56px;
+  gap: 12px;
+}
+
+.compare-view__divider-line {
+  width: 1px;
+  flex: 1;
+  background: #e4e0f7;
+  min-height: 40px;
+}
+
+.delta-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.delta-badge--up {
+  background: #2fae72;
+}
+
+.delta-badge--down {
+  background: #d9534f;
+}
+
+.compare-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 32px 32px;
+  box-shadow: 0 1px 2px rgba(31, 27, 58, 0.04);
+  border: 1px solid #f0edfb;
+}
+
+.compare-card__meta {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #9a94b8;
+  margin: 0 0 12px;
+}
+
+.compare-card__score {
+  font-size: 44px;
+  font-weight: 800;
+  margin: 0 0 24px;
+}
+
+.compare-card__score.score-high {
+  color: #2fae72;
+}
+
+.compare-card__score.score-low {
+  color: #c0522a;
+}
+
+.compare-card__section {
+  margin-bottom: 20px;
+}
+
+.compare-card__section:last-child {
+  margin-bottom: 0;
+}
+
+.compare-card__section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0 0 12px;
+}
+
+.compare-card__section-label--matched {
+  color: #2fae72;
+}
+
+.compare-card__section-label--missing {
+  color: #e05656;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tag--matched {
+  background: #e5f7ee;
+  color: #1e8a5f;
+}
+
+.tag--missing {
+  background: #fdeaea;
+  color: #d9534f;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .compare-view {
+    padding: 24px 16px 48px;
+  }
+
+  .compare-view__row {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-view__divider {
+    flex-direction: row;
+    padding-top: 0;
+    padding: 12px 0;
+  }
+
+  .compare-view__divider-line {
+    width: auto;
+    height: 1px;
+    flex: 1;
+    min-height: 0;
+  }
+}
