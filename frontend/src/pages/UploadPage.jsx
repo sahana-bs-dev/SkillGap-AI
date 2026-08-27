@@ -1,25 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./UploadPage.css";
-import { analyzeResume } from "../services/api";
+import { analyzeResume, getAnalysisHistory } from "../services/api";
 import { useNavigate } from "react-router-dom";
-
-// Mock data for now — swap this for a real API call (e.g. getRecentAnalyses())
-// once your friend's history endpoint is live in Phase 2/4
-const MOCK_RECENT_ANALYSES = [
-  { id: 1, jobTitle: "Frontend Developer Intern", company: "Zenith Labs", score: 78, date: "2026-08-22" },
-  { id: 2, jobTitle: "Software Engineer - New Grad", company: "Orbit Systems", score: 61, date: "2026-08-18" },
-  { id: 3, jobTitle: "React Developer", company: "Fern & Co", score: 85, date: "2026-08-14" },
-];
 
 export default function UploadPage() {
   const [resumeMode, setResumeMode] = useState("upload");
   const [resumeFile, setResumeFile] = useState(null);
   const [resumeText, setResumeText] = useState("");
   const [jdText, setJdText] = useState("");
-  const [recentAnalyses, setRecentAnalyses] = useState(MOCK_RECENT_ANALYSES);
+  const [recentAnalyses, setRecentAnalyses] = useState([]);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    getAnalysisHistory()
+      .then((history) => setRecentAnalyses(history.slice(0, 5)))
+      .catch(() => setRecentAnalyses([]));
+  }, []);
   function handleFileChange(e) {
     const file = e.target.files[0];
     if (file) setResumeFile(file);
@@ -46,6 +43,17 @@ export default function UploadPage() {
     if (score >= 75) return "score-high";
     if (score >= 50) return "score-mid";
     return "score-low";
+  }
+
+    function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    if (isNaN(d)) return dateStr;
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   }
 
   return (
@@ -123,7 +131,7 @@ export default function UploadPage() {
               <div className="recent-info">
                 <div className="recent-title">{item.jobTitle}</div>
                 <div className="recent-meta">
-                  {item.company} · {item.date}
+                  {item.company} · {formatDate(item.date)}
                 </div>
               </div>
               <div className={`recent-score ${scoreClass(item.score)}`}>

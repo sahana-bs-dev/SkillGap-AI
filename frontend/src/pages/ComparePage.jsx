@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import CompareView from "../components/compare/CompareView";
-import { mockAnalysisHistory } from "../data/mockCompareData";
+import { getAnalysisById } from "../services/api";
 import "./ComparePage.css";
 
 /**
@@ -9,22 +9,11 @@ import "./ComparePage.css";
  * Route: /compare?a=<attemptId>&b=<attemptId>
  *
  * Reads which two attempts to compare from the URL, loads them, and
- * renders CompareView. Currently reads from mock data — swap
- * `loadAttempts` below for real calls to services/api.js
- * (e.g. getAnalysisById) once the history endpoints exist.
- * The rest of the page (loading/empty/error handling, CompareView
- * itself) doesn't need to change.
+ * renders CompareView.
  */
 
-// TODO(backend): replace with a real call, e.g.
-//   const res = await api.get(`/history/${id}`);
-//   return res.data;
 function fetchAttemptById(id) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockAnalysisHistory.find((a) => a.id === id) || null);
-    }, 200); // simulated network delay
-  });
+  return getAnalysisById(id).catch(() => null);
 }
 
 export default function ComparePage() {

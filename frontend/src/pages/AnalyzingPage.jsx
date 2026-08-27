@@ -18,6 +18,7 @@ export default function AnalyzingPage() {
   const input = location.state;
 
   const [stepIndex, setStepIndex] = useState(0);
+  const [longWait, setLongWait] = useState(false);
   const ranOnce = useRef(false);
 
   useEffect(() => {
@@ -27,6 +28,12 @@ export default function AnalyzingPage() {
   useEffect(() => {
     if (stepIndex >= STEPS.length - 1) return;
     const timer = setTimeout(() => setStepIndex((i) => i + 1), STEP_INTERVAL_MS);
+    return () => clearTimeout(timer);
+  }, [stepIndex]);
+
+  useEffect(() => {
+    if (stepIndex < STEPS.length - 1) return;
+    const timer = setTimeout(() => setLongWait(true), 4000);
     return () => clearTimeout(timer);
   }, [stepIndex]);
 
@@ -72,6 +79,12 @@ export default function AnalyzingPage() {
             </li>
           ))}
         </ul>
+
+        {longWait && (
+          <p className="long-wait-note">
+            Still working — larger resumes or job descriptions can take a little longer.
+          </p>
+        )}
       </div>
     </div>
   );

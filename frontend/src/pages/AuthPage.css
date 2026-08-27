@@ -34,3 +34,10 @@
 @media (max-width: 900px){
   .screen-auth{grid-template-columns:1fr;}
 }
+
+.long-wait-note {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #8b8b9a;
+  text-align: center;
+}

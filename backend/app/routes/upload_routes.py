@@ -50,7 +50,31 @@ async def analyze(
     except ValueError as e:
         raise HTTPException(status_code=502, detail=f"AI analysis failed: {str(e)}")
 
+    from datetime import datetime
+    from app.db.mongo_client import history_collection
+
+    def derive_job_title(text: str) -> str:
+        words = text.strip().split()
+        if not words:
+            return "Resume analysis"
+        short = " ".join(words[:8])
+        return short + ("..." if len(words) > 8 else "")
+
+    record = {
+        "user_email": user_email,
+        "job_title": derive_job_title(jd_text),
+        "resume_text": final_resume_text,
+        "jd_text": jd_text.strip(),
+        "date": datetime.utcnow().isoformat(),
+        "match_score": analysis_result["match_score"],
+        "matching_points": analysis_result["matching_points"],
+        "missing_points": analysis_result["missing_points"],
+        "suggestions": analysis_result["suggestions"],
+    }
+    inserted = history_collection.insert_one(record)
+
     return {
+        "id": str(inserted.inserted_id),
         "user_email": user_email,
         "resume_text": final_resume_text,
         "jd_text": jd_text.strip(),

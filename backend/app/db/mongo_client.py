@@ -9,3 +9,4 @@ client = MongoClient(MONGO_URI)
 db = client["skillgapai"]
 
 users_collection = db["users"]
+history_collection = db["analysis_history"]

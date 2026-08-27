@@ -1,3 +1,5 @@
+import token
+
 from fastapi import APIRouter, HTTPException
 from app.models.user_model import UserSignup, UserLogin
 from app.db.mongo_client import users_collection
@@ -23,7 +25,7 @@ def signup(user: UserSignup):
     users_collection.insert_one(new_user)
 
     token = create_access_token({"email": user.email})
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "name": user.name}
 
 
 @router.post("/login")
@@ -35,8 +37,8 @@ def login(user: UserLogin):
     if not verify_password(user.password, existing_user["password"]):
         raise HTTPException(status_code=400, detail="Invalid email or password")
 
-    token = create_access_token({"email": user.email})
-    return {"access_token": token, "token_type": "bearer"}
+        token = create_access_token({"email": user.email})
+    return {"access_token": token, "token_type": "bearer", "name": existing_user.get("name", "")}
 
 GOOGLE_CLIENT_ID = "300780407407-7jjg4l0bf745obkfl8danar40pm6ldcj.apps.googleusercontent.com"
 
@@ -56,4 +58,4 @@ def google_auth(payload: dict):
         users_collection.insert_one({"name": name, "email": email, "password": None})
 
     access_token = create_access_token({"email": email})
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "name": name}

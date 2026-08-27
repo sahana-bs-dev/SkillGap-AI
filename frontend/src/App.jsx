@@ -16,14 +16,13 @@ export default function App() {
             there's no separate dashboard view, so redirect straight to /upload. */}
         <Route path="/dashboard" element={<Navigate to="/upload" replace />} />
 
-        {/* Everything inside the app (post-login) shares the sidebar layout */}
+         {/* Everything inside the app (post-login) shares the sidebar layout */}
         <Route element={<AppShell />}>
           <Route path="/upload" element={<UploadPage />} />
           <Route path="/report" element={<ReportPage />} />
-          {/* <Route path="/compare" element={<ComparePage />} /> -- Phase 4 */}
+          <Route path="/compare" element={<ComparePage />} />
         </Route>
         <Route path="/analyzing" element={<AnalyzingPage />} />
-        <Route path="/compare" element={<ComparePage />} />
       </Routes>
     </BrowserRouter>
   );

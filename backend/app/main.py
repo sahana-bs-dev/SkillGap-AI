@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.db.mongo_client import db
 from app.routes.auth_routes import router as auth_router
 from app.routes.upload_routes import router as upload_router
+from app.routes.history_routes import router as history_router
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.add_middleware(
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(upload_router, prefix="/upload", tags=["Upload"])
+app.include_router(history_router, prefix="/history", tags=["History"])
 
 @app.get("/")
 def root():
