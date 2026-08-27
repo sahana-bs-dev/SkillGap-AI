@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ComparisonPopup from '../components/report/ComparisonPopup';
+import { getAnalysisHistory } from "../services/api";
 import "./ReportPage.css";
 
 function summaryFor(score) {
@@ -12,13 +13,22 @@ function summaryFor(score) {
 
 export default function ReportPage() {
   const [showPopup, setShowPopup] = useState(false);
+  const [pastAttempts, setPastAttempts] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
 
   const data = location.state;
 
   useEffect(() => {
-    if (data) setShowPopup(true);
+    if (data) {
+      setShowPopup(true);
+      getAnalysisHistory()
+        .then((history) => {
+          const currentId = data.id ?? data._id;
+          setPastAttempts(history.filter((h) => h.id !== currentId));
+        })
+        .catch(() => setPastAttempts([]));
+    }
   }, [data]);
 
   // Guard: someone landed here directly without running an analysis
@@ -127,8 +137,9 @@ export default function ReportPage() {
   <ComparisonPopup
     open={showPopup}
     newAttemptScore={analysis.score}
+    pastAttempts={pastAttempts}
     onCompare={(selectedId) => {
-  navigate(`/compare?a=${analysis.id}&b=${selectedId}`);
+  navigate(`/compare?a=${selectedId}&b=${analysis.id}`);
 }}
     onSkip={() => setShowPopup(false)}
   />

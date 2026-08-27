@@ -1,6 +1,5 @@
 import React from "react";
 import "./CompareView.css";
-import { mockComparison } from "../../data/mockCompareData";
 
 /**
  * CompareView
@@ -11,10 +10,6 @@ import { mockComparison } from "../../data/mockCompareData";
  *      id, jobTitle, date, score,
  *      matched: string[], missing: string[]
  *    }
- *
- * When no props are passed, falls back to mock data so this
- * component can be dropped into ComparePage.jsx and previewed
- * immediately, before the history API is wired up.
  */
 function formatDate(dateStr) {
   const d = new Date(dateStr);
@@ -66,8 +61,8 @@ function AttemptCard({ attempt, attemptLabel }) {
 }
 
 export default function CompareView({ attemptA, attemptB }) {
-  const a = attemptA || mockComparison.attemptA;
-  const b = attemptB || mockComparison.attemptB;
+  const a = attemptA;
+  const b = attemptB;
 
   const delta = b.score - a.score;
   const deltaPositive = delta >= 0;

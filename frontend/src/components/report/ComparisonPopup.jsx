@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import "./ComparisonPopup.css";
-import { mockAnalysisHistory } from "../../data/mockCompareData";
 
 export default function ComparisonPopup({
   open,
   newAttemptScore,
-  pastAttempts = mockAnalysisHistory,
+  pastAttempts = [],
   onCompare,
   onSkip,
 }) {

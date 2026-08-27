@@ -2,9 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import "./AppShell.css";
 
 export default function AppShell() {
-  // TODO: once user profile data is available from the backend,
-  // swap this out for the real logged-in user's name/initials.
-  const userName = "Guest";
+  const userName = localStorage.getItem("userName") || "Guest";
   const initials = userName
     .split(" ")
     .map((w) => w[0])

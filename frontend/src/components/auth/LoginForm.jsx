@@ -17,6 +17,8 @@ export default function LoginForm() {
     try {
       const data = await loginUser(email, password);
       localStorage.setItem("token", data.access_token);
+      localStorage.setItem("userName", data.name || "");
+
       navigate("/dashboard");
     } catch (err) {
       setError(err.message);
@@ -52,6 +54,7 @@ export default function LoginForm() {
     try {
       const data = await googleAuth(credentialResponse.credential);
       localStorage.setItem("token", data.access_token);
+      localStorage.setItem("userName", data.name || "");
       navigate("/dashboard");
     } catch (err) {
       setError(err.message);
