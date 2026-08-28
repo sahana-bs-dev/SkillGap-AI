@@ -25,6 +25,18 @@
   margin-bottom: 22px;
 }
 
+@media (max-width: 720px) {
+  .upload-grid {
+    grid-template-columns: 1fr;
+  }
+  .page-head h2 {
+    font-size: 21px;
+  }
+  .card {
+    padding: 18px;
+  }
+}
+
 .card {
   background: #FFFFFF;
   border: 1px solid #ECE9F7;
