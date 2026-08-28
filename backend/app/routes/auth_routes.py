@@ -1,4 +1,3 @@
-import token
 
 from fastapi import APIRouter, HTTPException
 from app.models.user_model import UserSignup, UserLogin
@@ -37,7 +36,7 @@ def login(user: UserLogin):
     if not verify_password(user.password, existing_user["password"]):
         raise HTTPException(status_code=400, detail="Invalid email or password")
 
-        token = create_access_token({"email": user.email})
+    token = create_access_token({"email": user.email})
     return {"access_token": token, "token_type": "bearer", "name": existing_user.get("name", "")}
 
 GOOGLE_CLIENT_ID = "300780407407-7jjg4l0bf745obkfl8danar40pm6ldcj.apps.googleusercontent.com"

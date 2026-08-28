@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { loginUser, googleAuth } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 import "./LoginForm.css";
 
 export default function SignupForm() {
@@ -11,6 +12,7 @@ export default function SignupForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -18,7 +20,7 @@ export default function SignupForm() {
     setLoading(true);
     try {
       const data = await signupUser(name, email, password);
-      localStorage.setItem("token", data.access_token);
+      login(data.access_token, data.name || "");
       navigate("/upload");
     } catch (err) {
       setError(err.message);
@@ -56,7 +58,7 @@ export default function SignupForm() {
   onSuccess={async (credentialResponse) => {
     try {
       const data = await googleAuth(credentialResponse.credential);
-      localStorage.setItem("token", data.access_token);
+      login(data.access_token, data.name || "");
       navigate("/upload");
     } catch (err) {
       setError(err.message);

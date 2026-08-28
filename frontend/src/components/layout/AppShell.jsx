@@ -1,8 +1,11 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./AppShell.css";
 
 export default function AppShell() {
-  const userName = localStorage.getItem("userName") || "Guest";
+  const { userName: contextUserName, logout } = useAuth();
+  const navigate = useNavigate();
+  const userName = contextUserName || "Guest";
   const initials = userName
     .split(" ")
     .map((w) => w[0])
@@ -35,12 +38,23 @@ export default function AppShell() {
           </NavLink>
         </nav>
         <div className="spacer"></div>
-        <div className="user">
-          <div className="avatar">{initials}</div>
-          <div>
-            <div className="name">{userName}</div>
-            <div className="role">Free plan</div>
+        <div className="sidebar-footer">
+          <div className="user">
+            <div className="avatar">{initials}</div>
+            <div>
+              <div className="name">{userName}</div>
+              <div className="role">Free plan</div>
+            </div>
           </div>
+          <button
+            className="logout-btn"
+            onClick={() => {
+              logout();
+              navigate("/");
+            }}
+          >
+            Log out
+          </button>
         </div>
       </aside>
 
