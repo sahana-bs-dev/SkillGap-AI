@@ -89,6 +89,22 @@
   color: var(--ink-soft);
 }
 
+.logout-btn {
+  margin-top: 14px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  border: 1px solid var(--ink-soft, #ECE9F7);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-soft, #847F9E);
+  cursor: pointer;
+  width: 100%;
+}
+
+.logout-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
 .main {
   padding: 40px 48px;
   background: var(--bg);
@@ -99,7 +115,69 @@
     grid-template-columns: 1fr;
   }
   .sidebar {
+    flex-direction: column;
+    padding: 16px;
+  }
+  .sidebar nav {
     flex-direction: row;
     overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+  .sidebar nav a {
+    white-space: nowrap;
+    padding: 8px 12px;
+  }
+  .sidebar .spacer {
+    display: none;
+  }
+  .sidebar-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+    margin-top: 8px;
+    min-width: 0;
+  }
+  .sidebar .user {
+    border-top: none;
+    margin-top: 0;
+    padding: 0;
+    flex: 1;
+    min-width: 0;
+  }
+  .user .name,
+  .user .role {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .logout-btn {
+    width: auto;
+    margin-top: 0;
+    flex-shrink: 0;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .main {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .sidebar-footer {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .user .name {
+    max-width: 110px;
+  }
+  .logout-btn {
+    width: auto;
+    padding: 6px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 }
