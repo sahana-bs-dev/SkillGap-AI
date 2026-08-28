@@ -1,5 +1,3 @@
-import token
-
 from fastapi import APIRouter, HTTPException
 from app.models.user_model import UserSignup, UserLogin
 from app.db.mongo_client import users_collection
@@ -8,6 +6,9 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
 router = APIRouter()
+
+GOOGLE_CLIENT_ID = "300780407407-7jjg4l0bf745obkfl8danar40pm6ldcj.apps.googleusercontent.com"
+
 
 @router.post("/signup")
 def signup(user: UserSignup):
@@ -37,10 +38,9 @@ def login(user: UserLogin):
     if not verify_password(user.password, existing_user["password"]):
         raise HTTPException(status_code=400, detail="Invalid email or password")
 
-        token = create_access_token({"email": user.email})
+    token = create_access_token({"email": user.email})
     return {"access_token": token, "token_type": "bearer", "name": existing_user.get("name", "")}
 
-GOOGLE_CLIENT_ID = "300780407407-7jjg4l0bf745obkfl8danar40pm6ldcj.apps.googleusercontent.com"
 
 @router.post("/google")
 def google_auth(payload: dict):
