@@ -1,22 +1,15 @@
 import os
 import json
 import re
-import google.generativeai as genai
 from dotenv import load_dotenv
+from google import genai
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"), transport="rest")
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 print("KEY LOADED:", bool(os.getenv("GEMINI_API_KEY")))
-# model = genai.GenerativeModel(
-#     "gemini-3.6-flash",
-#     generation_config={"temperature": 0.2},
-# )
 
-model = genai.GenerativeModel(
-    "gemini-3.1-flash-lite",
-    generation_config={"temperature": 0.2},
-)
+MODEL_NAME = "gemini-3.6-flash"
 
 PROMPT_TEMPLATE = """
 You are an expert technical recruiter and resume analyst. Compare the following RESUME against the JOB DESCRIPTION and return a structured analysis.
@@ -57,12 +50,17 @@ Rules:
 - Do not include any text outside the JSON object.
 """
 
+
 def analyze_resume_vs_jd(resume_text: str, jd_text: str) -> dict:
     prompt = PROMPT_TEMPLATE.format(resume_text=resume_text, jd_text=jd_text)
-    response = model.generate_content(prompt)
+
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt,
+        config={"temperature": 0.2},
+    )
     raw_text = response.text.strip()
 
-    # Strip markdown code fences if Gemini adds them despite instructions
     cleaned = re.sub(r"^```json\s*|\s*```$", "", raw_text, flags=re.MULTILINE).strip()
 
     try:
