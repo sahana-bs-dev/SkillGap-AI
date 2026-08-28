@@ -29,3 +29,7 @@ lerna-debug.log*
 
 # --- Misc ---
 *.zip
+
+__pycache__/
+*.pyc
+*.pyo
