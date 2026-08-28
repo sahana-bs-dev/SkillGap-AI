@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"), transport="rest")
+print("KEY LOADED:", bool(os.getenv("GEMINI_API_KEY")))
 # model = genai.GenerativeModel(
 #     "gemini-3.6-flash",
 #     generation_config={"temperature": 0.2},
